@@ -29,16 +29,16 @@ load("movies.Rdata")
 
 * * *
 
-## Part 1: Data
+## Data
 
-In the `movies` dataset given for this project, there is 651 **randomly sampled** movies which were released in United States movie theater in the period of 1970-2014. The data was obtained from [Rotten Tomatoes](https://www.rottentomatoes.com/) and [IMDB](https://www.imdb.com/). The dataset contains 32 features of each movie, including genre, MPAA rating, production studio, and whether they recieved Oscar nominations.
+In the `movies` dataset, there is 651 **randomly sampled** movies which were released in United States movie theater in the period of 1970-2014. The data was obtained from [Rotten Tomatoes](https://www.rottentomatoes.com/) and [IMDB](https://www.imdb.com/). The dataset contains 32 features of each movie, including genre, MPAA rating, production studio, and whether they recieved Oscar nominations.
 
 Even though there is no detailed information about the exact sampling methods used, the movies included in this dataset were randomly sampled from the above two mentioned sources and no bias were created by the sampling method so we can assume that the results obtained can be **generalized to all U.S movies released between 1970 and 2014**. On the other hand, because this is an observational study, **the relationships that could be find from this data indicate association, but _not causation_**
 
 * * *
-## Part 2: Data manipulation  
+## Data wrangling  
     
-In order to develop the Bayesian regression model to predict `audience_score` from the explanatory variables indicated in the instructions, we will use the function `mutate` to create the new variables requiered as follows:
+In order to develop the Bayesian regression model to predict `audience_score` from the explanatory variables, we will use the function `mutate` to create the new variables as follows:
 
   * `feature_film`: with two levels:
     + 'yes': if `title_type` is 'Feature Film'
@@ -104,7 +104,7 @@ movies_final <- movies%>%
 
 * * *
 
-## Part 3: Exploratory data analysis
+## Exploratory data analysis
   
 ### Relation between new exploratory and response variables:
 
@@ -276,7 +276,7 @@ cor(movies$audience_score, movies$critics_score)
 In this case, the plot and the correlation coefficient show a less strong correlation between both variables than in the case of `imdb_rating`, but it is still high. 
 
 * * *
-## Part 4: Modeling
+## Modeling
 
 We will now proceed to conduct a Bayesian regression using the `BAS` package. We will use Bayesian Model Average (BMA) and  Zellner-Siow Cauchy prior along with an uniform model prior to assign equal probabilities to all models. Regarding the option method, we will use "MCMC" (Markov chain Monte Carlo) that improves the  model search efficiency.
 
@@ -382,7 +382,7 @@ plot(movies_bas, which = 4, ask=F, cex.lab=0.5)
  In this case, we can observe the marginal posterior inclusion probabilities for each of the covariates, with marginal posterior inclusion probabilities that are greater than 0.5 shown in red (important variables for explaining the data and prediction). In the graph, we can see what it was show already before that imbd_rating and critics_score contribute to the final scores.
 
 * * *
-## Part 5: Prediction
+## Prediction
 
 Now, we can test the predictive capability of the developed model using two movies:  "Zootropolis" released in 2016. The corresponding information was obtained from the [IMDB website](https://www.imdb.com/title/tt2948356/?ref_=nv_sr_1) and [RottenTomatoes](https://www.rottentomatoes.com/m/zootopia) to be consistent with the analysis data. 
 
@@ -405,8 +405,6 @@ The true `audience_score` according to RottenTomatoes is 92, which is pretty clo
 
 
 * * *
-
-## Part 6: Conclusion
 
 After performing the Bayesian analysis approach, we can conclude that the `audience_score` of a movie can be predicted. Even though the BMA takes into account all variables, `imdb_rating` and `critics_score` appeared to be the most important predictors, even though that this two variables showed a strong correlation with our response variable and they could be weighted heavily because of this. 
 
