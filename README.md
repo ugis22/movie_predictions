@@ -1,5 +1,5 @@
-## Prediction of movie popularity
-Read my publication about movie popularity project on Medium:
+## Prediction of movie popularity 
+Read my publication about movie popularity project on Medium:  
 [Movie Popularity]()
 
 ## Introduction
