@@ -1,1 +1,2 @@
-# movie_predictions
+## Prediction of movie popularity
+
