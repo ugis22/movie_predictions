@@ -100,15 +100,18 @@ movies <- movies%>%
 
 
 * * *
-##FIRST PART: LINEAR REGRESSION
-
-The aim of the first part of this project is to assess whether:
+The aim of this project is to assess whether:
 
 > Can the popularity of a movie be predicted by considering certain characteristic information about it such as type, genre, MPAA rating, number of IMDb votes, and whether it has won an award?
 
   * **Why predicting popularity of a movie?**  
   Movie popularity can help people to decide which movie to watch, or whether they want to go the cinema to watch it or wait till the DVD is release and watch it at home. Consequently, it could also help theater owner to choose which movies to show or how many times to show it or for how long. 
-  
+
+* * *
+## FIRST PART: LINEAR REGRESSION
+
+For this first part of the project, we will considered the following variables:
+
   * **Variables to consider:**  
     + We will analyze movie popularity by considering the variables:   
        + `audience_score`(Audience score on Rotten Tomatoes)    
@@ -122,8 +125,6 @@ The aim of the first part of this project is to assess whether:
        + `best_actor_win` (Whether or not one of the main actors in the movie ever won an Oscar)  
        + `best_actress_win` (Whether or not one of the main actress in the movie ever won an Oscar)  
        + `best_dir_win` (Whether or not one of the director in the movie ever won an Oscar) 
-
-* * *
 
 ## Exploratory data analysis
 First of all, we will check whether `audience_score` and `imdb_rating` show a correlation between them. For doing this, we will plot both variables in a scatter plot: 
@@ -463,22 +464,17 @@ The plot above does not display any particulat pattern, so it is possible to ass
 
 Now, we can test the predictive capability of the developed model using two movies:  "Zootropolis" and "Hidden Figures" both released in 2016. The corresponding information was obtained from the IMDB website to be consistent with the analysis data. 
 
-```{r iron_man2}
-jungle <- data.frame(genre="Comedy", mpaa_rating="PG", best_dir_win="yes", 
+```{r zootropolis_linar}
+zoo <- data.frame(genre="Comedy", mpaa_rating="PG", best_dir_win="yes", 
                                   log_votes = log(345340))
-predict_1 <- predict(step2_model, jungle, interval="predict")
-
-hidden <- data.frame(genre="Drama", mpaa_rating="PG", best_dir_win="no", 
-                                  log_votes = log(149641))
-predict_2 <- predict(step2_model, hidden, interval="predict")
+predict_1 <- predict(step2_model, zoo, interval="predict")
 
 imdb_rating_predictions <- c(8.0, 7.8)
 
-predictions <- data.frame("t" = c("Zootropolis", "Hidden Figures"),
-                          "a" = c(sprintf("%2.1f", predict_1[1]), sprintf("%2.1f", predict_2[1])),
-                          "b" = c(sprintf("%2.1f-%2.1f", predict_1[2], predict_1[3]),
-                                sprintf("%2.1f-%2.1f", predict_2[2], predict_2[3])),
-                          "c" = c(imdb_rating_predictions[1], imdb_rating_predictions[2]))
+predictions <- data.frame("t" = "Zootropolis",
+                          "a" = sprintf("%2.1f", predict_1[1]),
+                          "b" = sprintf("%2.1f-%2.1f", predict_1[2], predict_1[3]),
+                          "c" = imdb_rating_predictions[1])
 colnames(predictions) = c("Movie", "Predicted rating", "95% CI", "IMDb rating")
 
 predictions
@@ -488,27 +484,21 @@ First of all, we can say that in this case the 95% confidence interval can be in
   
 From the table we can observed that the model was close in predicting the rating for Hidden Figures.However, when predicting Zootropolis, the model failed to give the correct prediction but the real rating is inside the 95% confidence prediction interval. 
 
-
 * * *
 
-From the linear regression we learnt that in fact the popularity of a movie can be predicted by considering characteristic data such as genre, MPAA rating, number of IMDb votes, and whether the director has ever won an award. 
+## SECOND PART: BAYESIAN MODELING
 
-In this analysis, it was possible to build a parsimonious, multivariable, linear model that is able to some extend to predict the movie popularity, understood as $IMDb\ rating$, with the four statistically significant predictors chosen. However, it is important to remember that the $R_{adj}^2$ of our final model is only 0.3595, so this means that 35.95% of the variability is explained by the model. So, we could still improve our model by, for example, taking a larger analysis sample to take into account the variability, use a stratified sample for reflecting the true population, or identify other movie characteristic data that can be added to the model.
+Another way to predict movie popularity is to use a Bayesian modeling instead of a linear regression model. 
+So, we will start by selecting the variables that are interesting for this part of the project:
 
-* * *
 
-##SECOND PART: BAYESIAN MODELING
-
-First of all, we will select variables that are interesting for this part of the project:
-
-After creating the new variables, we will select the variables requiered for the analysis:
 
 ```{r selecting}
 movies_final <- movies%>%
                   select(feature_film, drama, runtime, mpaa_rating_R, 
                          thtr_rel_year, oscar_season, summer_season, imdb_rating,
                          imdb_num_votes, critics_score, best_pic_nom, best_pic_win,
-                         best_actor_win, best_actress_win, best_dir_win, top200_box, audience_score)
+                         best_actor_win, best_actress_win, best_dir_win, top200_box)
 ```
 
 * * *
@@ -517,46 +507,46 @@ movies_final <- movies%>%
   
 ### Relation between new exploratory and response variables:
 
-First of all, we will investigate which is the relationship between the response variable `audience_score` and the new exploratory variables created. In doing so, we will create summary statistic tables and side-by-side boxplot:
+First of all, we will investigate which is the relationship between the response variable `imdb_rating` and the new exploratory variables created. In doing so, we will create summary statistic tables and side-by-side boxplot:
 
 ```{r feature_plot, fig.height= 8, fig.width=8}
-p1 <- ggplot(movies_final, aes(x=feature_film, y = audience_score, fill=feature_film))+
+p1 <- ggplot(movies_final, aes(x=feature_film, y = imdb_rating, fill=feature_film))+
   geom_boxplot(alpha = 0.7)+
   theme_minimal()+
   scale_fill_brewer(palette="Set2")+
-  labs(x = "Feature Film", y= "Audience Score")+ 
+  labs(x = "Feature Film", y= "imdb_rating")+ 
   theme(axis.text.x=element_text(angle=90, hjust = 1, vjust = 0))+
   theme(legend.position="none")
 
-p2 <- ggplot(movies_final, aes(x=drama, y = audience_score, fill=drama))+
+p2 <- ggplot(movies_final, aes(x=drama, y = imdb_rating, fill=drama))+
   geom_boxplot(alpha = 0.7)+
   theme_minimal()+
   scale_fill_brewer(palette="Set3")+
-  labs(x = "Drama", y= "Audience Score")+ 
+  labs(x = "Drama", y= "imdb_rating")+ 
   theme(axis.text.x=element_text(angle=90, hjust = 1, vjust = 0))+
   theme(legend.position="none")
 
-p3<- ggplot(movies_final, aes(x=mpaa_rating_R, y = audience_score, fill=mpaa_rating_R))+
+p3<- ggplot(movies_final, aes(x=mpaa_rating_R, y = imdb_rating, fill=mpaa_rating_R))+
   geom_boxplot(alpha = 0.7)+
   theme_minimal()+
   scale_fill_brewer(palette="Set1")+  
-  labs(x = "MPAA Rating R", y= "Audience Score")+ 
+  labs(x = "MPAA Rating R", y= "imdb_rating")+ 
   theme(axis.text.x=element_text(angle=90, hjust = 1, vjust = 0))+
   theme(legend.position="none")
 
-p4 <- ggplot(movies_final, aes(x=oscar_season, y = audience_score, fill=oscar_season))+
+p4 <- ggplot(movies_final, aes(x=oscar_season, y = imdb_rating, fill=oscar_season))+
   geom_boxplot(alpha = 0.7)+
   theme_minimal()+
   scale_fill_brewer(palette="Dark2")+   
-  labs(x = "Oscar season", y= "Audience Score")+ 
+  labs(x = "Oscar season", y= "imdb_rating")+ 
   theme(axis.text.x=element_text(angle=90, hjust = 1, vjust = 0))+
   theme(legend.position="none")
 
-p5 <- ggplot(movies_final, aes(x=summer_season, y = audience_score, fill=summer_season))+
+p5 <- ggplot(movies_final, aes(x=summer_season, y = imdb_rating, fill=summer_season))+
   geom_boxplot(alpha = 0.7)+
   theme_minimal()+
   scale_fill_brewer(palette="RdBu")+   
-  labs(x = "Summer season", y= "Audience Score")+ 
+  labs(x = "Summer season", y= "imdb_rating")+ 
   theme(axis.text.x=element_text(angle=90, hjust = 1, vjust = 0))+
   theme(legend.position="none")
 
@@ -571,13 +561,13 @@ grid.arrange(p1, p2, p3, p4, p5, nrow = 3)
 table_feature <- movies_final %>%
                     tbl_df%>%
                     group_by(feature_film)%>%
-                    dplyr::summarize(n = n(), Mean = mean(round(mean(audience_score), 2)), Sd = sd(audience_score))
+                    dplyr::summarize(n = n(), Mean = mean(round(mean(imdb_rating), 2)), Sd = sd(imdb_rating))
 pandoc.table(table_feature)
 ```
 
 From the table and the plots, we can observe that:  
   
- * Even though there are only 60 non-feature films vs. 591 feature films, a potential relationship between `feature_film` and `audience_score` is present in this dataset due to the fact that non feature films appear to have an `audience_score` mean of 20.5 point higher than feature films. 
+ * Even though there are only 60 non-feature films vs. 591 feature films, a potential relationship between `feature_film` and `imdb_rating` is present in this dataset due to the fact that non feature films appear to have an `imdb_rating` mean of 7.53 point higher than feature films. 
  * Taking into consideration the variance of both groups, it is neccesary to use inferential tools to distinguish if this difference is statistically significant. 
 
 
@@ -587,14 +577,14 @@ From the table and the plots, we can observe that:
 table_drama <- movies_final %>%
                     tbl_df%>%
                     group_by(drama)%>%
-                    dplyr::summarize(n = n(), Mean = mean(round(mean(audience_score), 2)), Sd = sd(audience_score))
+                    dplyr::summarize(n = n(), Mean = mean(round(mean(imdb_rating), 2)), Sd = sd(imdb_rating))
 pandoc.table(table_drama)
 ```
 
 From the plot and the table, we can observe the following:  
 
  * There are 346 movies that belong to the category drama and 305 that do not.   
- * Contrary to what we observed with `feature_film` variable, there is not clear relationship between `drama` and `audience_score` as the mean of both groups is similar (59.73 vs. 65.35). 
+ * Contrary to what we observed with `feature_film` variable, there is not clear relationship between `drama` and `imdb_rating` as the mean of both groups is similar. 
 
 #### - `mpaa_rating_R`:
 
@@ -602,14 +592,14 @@ From the plot and the table, we can observe the following:
 table_rating <- movies_final %>%
                     tbl_df%>%
                     group_by(mpaa_rating_R)%>%
-                    dplyr::summarize(n = n(), Mean = mean(round(mean(audience_score), 2)), Sd = sd(audience_score))
+                    dplyr::summarize(n = n(), Mean = mean(round(mean(imdb_rating), 2)), Sd = sd(imdb_rating))
 pandoc.table(table_rating)
 ```
 
 From the plot and the table, we learnt that:  
   
- * The variable `mpaa_rating` shows no relationship with `audience_score`.  
- * Not only we can see that half of the movies (329) belongs to the category 'R' of MPAA Rating, but also the mean of `audience_score` is equal in both groups (62.04 vs. 62.69) as well as the variance (20.16 vs. 20.32).
+ * The variable `mpaa_rating` shows no relationship with `imdb_rating`.  
+ * Not only we can see that half of the movies (329) belongs to the category 'R' of MPAA Rating, but also the mean of `audience_score` is equal in both groups as well as the variance.
 
 
 #### - `oscar_season`:
@@ -618,15 +608,15 @@ From the plot and the table, we learnt that:
 table_oscar <- movies_final %>%
                     tbl_df%>%
                     group_by(oscar_season)%>%
-                    dplyr::summarize(n = n(), Mean = mean(round(mean(audience_score), 2)), Sd = sd(audience_score))
+                    dplyr::summarize(n = n(), Mean = mean(round(mean(imdb_rating), 2)), Sd = sd(imdb_rating))
 pandoc.table(table_oscar)
 ```
 
 From the plot and the table, we observe that:  
   
- * The variable `oscar_season` do not show a evident relationship with `audience_score`.  
+ * The variable `oscar_season` do not show a evident relationship with `imdb_rating`.  
  * There is fewer movies released within Oscar season (191) that outside it (460).
- * The mean of `audience_score` is similar in both groups (63.69 vs. 61.81) as well as the variance (20.46 vs. 20.12).
+ * The mean of `imdb_rating` is similar in both groups as well as the variance.
 
 
 #### - `summer_season`:
@@ -635,7 +625,7 @@ From the plot and the table, we observe that:
 table_summer <- movies_final %>%
                     tbl_df%>%
                     group_by(summer_season)%>%
-                    dplyr::summarize(n = n(), Mean = mean(round(mean(audience_score), 2)), Sd = sd(audience_score))
+                    dplyr::summarize(n = n(), Mean = mean(round(mean(imdb_rating), 2)), Sd = sd(imdb_rating))
 pandoc.table(table_summer)
 ```
 
@@ -643,9 +633,9 @@ From the plot and the table, we observe that:
   
  * The variable `summer_season` do not show a evident relationship with `audience_score`.  
  * There is fewer movies released within summer season (208) that outside it (443).
- * The mean of `audience_score` is similar in both groups (61.81 vs. 62.62) as well as the variance (19.91 vs. 20.39).
+ * The mean of `audience_score` is similar in both groups as well as the variance.
 
-From the exploratory analysis performed, we can speculate that the new created variable `feature_film` would have the strongest relationship with our response variable `audience_score` while the other new variables created could have weak or no relationship.
+From the exploratory analysis performed, we can speculate that the new created variable `feature_film` would have the strongest relationship with our response variable `imdb_rating` while the other new variables created could have weak or no relationship.
 
 * * *
 ## Modeling
@@ -662,7 +652,7 @@ movies_final <- movies_final %>%
 The code below creates the full Bayesian model:
 
 ```{r bayesian}
-movies_bas <- bas.lm(audience_score ~ .,
+movies_bas <- bas.lm(imdb_rating ~ .,
                      data = movies_final,
                      method = "MCMC",
                      prior = "ZS-null",
@@ -671,7 +661,7 @@ movies_bas <- bas.lm(audience_score ~ .,
 
 We will now print the marginal inclusion probabilities obtained for the model:
 
-```{r summary}
+```{r summary2}
 movies_bas
 ```
 
@@ -694,26 +684,28 @@ to visualize the Log Posterior Odds and Model Rank. In the picture above, each r
 
 
 > From the model and the image above, we can see that:  
->    * `imdb_rating` has a marginal probability of 1, and appears in all five top models  
->    * `critics_score` has a marginal probability of 0.88091 and also appears in all five top models
->    * `runtime` has a marginal probability of 0.46413 and appears in the two of the five top models (second and fifth model)
+>    * `feature_film` has a marginal probability of 0.999, and appears in all five top models  
+>    * `critics_score` has a marginal probability of 0.999 and also appears in all five top models
+>    * `runtime` has a marginal probability of 0.98 and appears in all five top models
+>    * `drama` has a marginal probability of 0.57 and appears in three of the five top models
+>    * `imbd_num_votes` has a marginal probability of 0.99 and appears in three of the five top models 
 >    * the intercept also has a marginal probability of 1, and appears in all five top models
     
-According to this, the best model includes the intercept, `imdb_rating`, `critics_score` and `runtime`
+According to this, the best model includes the intercept, `feature_film`, `critics_score`, `drama`, `imbd_num_votes` and `runtime`
 
 #### Posterior Distributions of Coefficients
 
-We can now obtain the coefficients estimates and standard deviations under BMA in order to be able to examine the marginal distributions for intercept, `imdb_rating`, `critics_score` and `runtime` coefficients. To do so, we will use the function `coef` and plot them using `plot`:  
+We can now obtain the coefficients estimates and standard deviations under BMA in order to be able to examine the marginal distributions for the important variables coefficients. To do so, we will use the function `coef` and plot them using `plot`:  
 
 
 ```{r coefficients}
 coef_movies <- coef(movies_bas)
 
-par(mfrow=c(2,2))
-plot(coef_movies, subset = c(1, 4, 9, 11), ask=F)
+par(mfrow=c(3,2))
+plot(coef_movies, subset = c(1, 2, 3, 4, 9, 10), ask=F)
 ```
 
-The vertical line corresponds to the posterior probability that the coefficient equals to 0. On the other hand, the shaped curve shows the density of posiible values where the coefficient is non-zero. It is worthy to mention that the height of the line is scaled to its probability. This implies that intercept and `imbd_rating` show no line denoting non-zero probability, `critics_score` has 90% probability of not being zero while `runtime` has only 50%.
+The vertical line corresponds to the posterior probability that the coefficient equals to 0. On the other hand, the shaped curve shows the density of posiible values where the coefficient is non-zero. It is worthy to mention that the height of the line is scaled to its probability. This implies that intercept and `feature_film`, `critics_score`, `imbd_num_votes` and `runtime` show no line denoting non-zero probability.
 
 Last, we can obtain credible intervals for coefficients using `confint` method:
 
@@ -730,20 +722,20 @@ confint(coef_movies)
 plot(movies_bas, which = 1, ask=F)
 ```
 
-We can observe here a plot of the "Residuals vs. Fitted values"" under BMA. Ideally, we will expect to not see outliers or non-constant variance. However, in this case we can not see that there is a constant spead over the prediction and moreover, there are three outliers. 
+We can observe here a plot of the "Residuals vs. Fitted values"" under BMA. Ideally, we will expect to not see outliers or non-constant variance. However, in this case we can see that there is a constant spead over the prediction but there are two outliers. 
 
  **Model probabilities**
 ```{r prob, fig.height=4}
 plot(movies_bas, which = 2, ask=F)
 ```
 
-This plot displays the cumulative probability of the models in the order that they are sampled. This plot shows that the cumulative probability starts to level off after 1000 model trials as each additional model adds only a small increment to the cumulative probability. The model search stops at ~6500 instead of enumerations of 2^16 combinations.
+This plot displays the cumulative probability of the models in the order that they are sampled. This plot shows that the cumulative probability starts to level off after 300 model trials as each additional model adds only a small increment to the cumulative probability. The model search stops at ~1400 instead of enumerations of 2^15 combinations.
 
  **Model complexity**
 ```{r compl, fig.height=4}
 plot(movies_bas, which = 3, ask=F)
 ```
-This plot shows the dimension of each model, that is the number of regression coefficients including the intercept versus the log of the marginal likelihood of the model. In this case, we can see that highest log marginal can be reached from 2 to 12 dimensions. 
+This plot shows the dimension of each model, that is the number of regression coefficients including the intercept versus the log of the marginal likelihood of the model. In this case, we can see that highest log marginal can be reached from 5 to 12 dimensions. 
 
 
  **Marginal inclusion probabilities**
@@ -751,18 +743,18 @@ This plot shows the dimension of each model, that is the number of regression co
 plot(movies_bas, which = 4, ask=F, cex.lab=0.5)
 ```
 
- In this case, we can observe the marginal posterior inclusion probabilities for each of the covariates, with marginal posterior inclusion probabilities that are greater than 0.5 shown in red (important variables for explaining the data and prediction). In the graph, we can see what it was show already before that imbd_rating and critics_score contribute to the final scores.
+ In this case, we can observe the marginal posterior inclusion probabilities for each of the covariates, with marginal posterior inclusion probabilities that are greater than 0.5 shown in red (important variables for explaining the data and prediction). In the graph, we can see what it was show already before about which variables contribute to the final scores.
 
 * * *
 ## Prediction
 
 Now, we can test the predictive capability of the developed model using two movies:  "Zootropolis" released in 2016. The corresponding information was obtained from the [IMDB website](https://www.imdb.com/title/tt2948356/?ref_=nv_sr_1) and [RottenTomatoes](https://www.rottentomatoes.com/m/zootopia) to be consistent with the analysis data. 
 
-```{r iron_man2}
+```{r zootropolis_bayesian}
 zootropolis <- data.frame(feature_film = "yes", drama="no", 
                           runtime=108, mpaa_rating_R = "no", 
                           thtr_rel_year = 2016, oscar_season = "no", 
-                          summer_season = "no", imdb_rating=8.0,
+                          summer_season = "no", 
                           imdb_num_votes = 345433, critics_score=98, 
                           best_pic_nom = "yes", best_pic_win = "yes",
                           best_actor_win = "no", best_actress_win = "no",
@@ -773,14 +765,14 @@ predict_1 <- predict(movies_bas, zootropolis, estimator="BMA", interval = "predi
 predict_1$Ybma
 ```
 
-The true `audience_score` according to RottenTomatoes is 92, which is pretty close to what our model predicted.
+The true `imdb_rating` is 8, which is pretty close to what our model predicted.
 
 
 * * *
+From the linear regression and the Bayesian model we learnt that in fact the popularity of a movie can be predicted by considering characteristic data of each movie.
 
-After performing the Bayesian analysis approach, we can conclude that the `audience_score` of a movie can be predicted. Even though the BMA takes into account all variables, `imdb_rating` and `critics_score` appeared to be the most important predictors, even though that this two variables showed a strong correlation with our response variable and they could be weighted heavily because of this. 
+In the linear regression analysis, it was possible to build a parsimonious, multivariable, linear model that is able to some extend to predict the movie popularity, understood as $IMDb\ rating$, with the four statistically significant predictors chosen. However, it is important to remember that the $R_{adj}^2$ of our final model is only 0.3595, so this means that 35.95% of the variability is explained by the model. In the Bayesian model, we finally got a parsimonious model that also fullfilled the Bayesian assumptions.  
+From both models, we can see that the Bayesian model is the one which prediction was close to the real `imdb_rating`.
 
-However, it is important to highlight that more information is needed to improve the accuracy of the prediction, as well as a potential transformation of some of the numerical variables, as we saw previously that there were some outliers and 
-there was not a constant spread in the prediction. 
 
 
