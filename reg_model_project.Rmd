@@ -69,7 +69,7 @@ Even though there is no detailed information about the exact sampling methods us
 
 * * *
 
-## Part 3: Exploratory data analysis
+## Exploratory data analysis
 First of all, we will check whether `audience_score` and `imdb_rating` show a correlation between them. For doing this, we will plot both variables in a scatter plot: 
 
 ```{r fig.width=5, fig.height=3}

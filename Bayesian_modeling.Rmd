@@ -92,7 +92,7 @@ movies <- movies%>%
                                                             'yes', 'no')))
 ```
 
-After creating the new variables, we will select the variables requiered for the analysis described in the instructions:
+After creating the new variables, we will select the variables requiered for the analysis:
 
 ```{r selecting}
 movies_final <- movies%>%
