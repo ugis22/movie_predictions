@@ -10,8 +10,7 @@ The purpose of this project is to analysis a dataset containing information abou
 
 This repository includes the following main files:
 
-* a dataset `movies.Rdata` used to perform the analysis.
-* a code book that describes the variables and the data called `CodeBook.md`. 
+* a dataset `movies.Rdata` used to perform the analysis. 
 * a `README.md` that explains how all of the scripts work and how they are connected.
 * a `Rmd` file that shows the raw code of the linear regression and bayesian modeling analysis called `movies_prediction.Rmd`.
 * a htlm file that shows the analysis that was performed called `movies_predictions.html`. 
