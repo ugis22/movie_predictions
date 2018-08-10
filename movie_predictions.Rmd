@@ -1,7 +1,8 @@
 ---
 title: "Predicting Movie popularity"
-output: 
-  html_document: 
+output:
+  pdf_document: default
+  html_document:
     fig_height: 4
     highlight: pygments
     theme: spacelab
