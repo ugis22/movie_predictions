@@ -1,11 +1,11 @@
 ---
 title: "Predicting Movie popularity"
 output:
-  pdf_document: default
   html_document:
     fig_height: 4
     highlight: pygments
     theme: spacelab
+  pdf_document: default
 ---
 ### Setup
 ### Load packages
