@@ -1,6 +1,6 @@
 ## Prediction of movie popularity 
-Read my publication about movie popularity project on Medium:  
-[Movie Popularity]
+Read my publication about Bayesian modeling project on Medium:  
+[Bayesian Modeling]
 
 ## Introduction
 Movie popularity can help people to decide which movie to watch, or whether they want to go the cinema to watch it or wait till the DVD is release and watch it at home. Consequently, it could also help theater owner to choose which movies to show or how many times to show it or for how long.
