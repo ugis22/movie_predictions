@@ -134,7 +134,7 @@ First of all, we will check whether `audience_score` and `imdb_rating` show a co
 ggplot(movies, aes(x=audience_score, y=imdb_rating))+
   theme_minimal()+
   geom_point()+
-  geom_smooth()+
+  geom_smooth(method = lm)+
   labs(x = "Score in Rotten Tomatoes", y = "Rating in Imdb")
    
 ```
@@ -173,7 +173,7 @@ summary(movies$audience_score)
 ```
 
 
-The distribution of __audience_score__ variable shows a more uniform distribution with a mean of 62.36 and a median of 65.00. 
+The variable __audience_score__ shows a more uniform distribution with a mean of 62.36 and a median of 65.00. 
 
 Because of its distribution, we will choose to considered only `imdb_rating` as the response variable.
 
