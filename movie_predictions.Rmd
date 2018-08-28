@@ -158,7 +158,7 @@ ggplot(movies, aes(x=imdb_rating)) +
 summary(movies$imdb_rating)
 ```
 
-The distribution of __imbd_rating__ variable shows a distribution close to normal with a slightly left skew with a mean of 6.493 and a median of 6.00. 
+The variable __imbd_rating__ shows a distribution close to normal with a slightly left skew with a mean of 6.493 and a median of 6.00. 
 
 #### -- Distribution of `audience_score`:
 
