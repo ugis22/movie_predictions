@@ -383,7 +383,6 @@ movies_interesting <- movies_interesting%>%
 
 ```
 
-
 * * *
 
 ## Modeling
