@@ -348,12 +348,11 @@ p7 <- ggplot(movies_interesting, aes(x=best_dir_win, y = imdb_rating, fill = bes
   theme(legend.position="none")
 
 
-grid.arrange(p1, p2, p3, p4, nrow = 2)
+grid.arrange(p3, p4, p7, p5, p6, nrow = 3)
 ```
 
 ```{r staff oscar, fig.height=3}
-grid.arrange(p5, p6, p7, nrow =1)
-
+grid.arrange(p5, p6, nrow =1)
 ```
 
 ```{r summary st}
