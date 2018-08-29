@@ -155,8 +155,20 @@ ggplot(movies, aes(x=imdb_rating)) +
   geom_histogram(fill="lightgreen", alpha = 0.7)+
   theme_bw()+
   labs(x = "Imdb rating", y= "Count", title = "Distribution of Imdb rating")
-summary(movies$imdb_rating)
 ```
+```{r table}
+grid.newpage()
+grid.table(movies %>%
+  summarise(mean = round(mean(imdb_rating), 3), 
+            sd = round(sd(imdb_rating), 3), 
+            median = median(imdb_rating), 
+            IQR = IQR(imdb_rating), 
+            min = min(imdb_rating), 
+            max = max(imdb_rating)))
+```
+
+
+
 
 The variable __imbd_rating__ shows a distribution close to normal with a slightly left skew with a mean of 6.493 and a median of 6.00. 
 
@@ -169,7 +181,17 @@ ggplot(movies, aes(x=audience_score)) +
   geom_histogram(fill="pink", alpha = 0.7)+
   theme_bw()+
   labs(x = "Audience Score", y= "Count", title = "Distribution of audience score")
-summary(movies$audience_score)
+```
+
+```{r summary2}
+grid.newpage()
+grid.table(movies %>%
+  summarise(mean = round(mean(audience_score), 3), 
+            sd = round(sd(audience_score), 3), 
+            median = median(audience_score), 
+            IQR = IQR(audience_score), 
+            min = min(audience_score), 
+            max = max(audience_score)))
 ```
 
 
