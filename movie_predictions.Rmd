@@ -663,7 +663,7 @@ From the exploratory analysis performed, we can speculate that the new created v
 * * *
 ## Modeling
 
-We will now proceed to conduct a Bayesian regression using the `BAS` package. We will use Bayesian Model Average (BMA) and  Zellner-Siow Cauchy prior along with an uniform model prior to assign equal probabilities to all models. Regarding the option method, we will use "MCMC" (Markov chain Monte Carlo) that improves the  model search efficiency.
+We will now proceed to conduct a Bayesian regression using the `BAS` package. We will use Bayesian Model Average (BMA) and Zellner-Siow Cauchy prior along with an uniform model prior to assign equal probabilities to all models. Regarding the option method, we will use "MCMC" (Markov chain Monte Carlo) that improves the  model search efficiency.
 
 Fist of all, we will discard any rows with `NAs`:
 
