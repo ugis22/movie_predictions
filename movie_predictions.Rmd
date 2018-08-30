@@ -770,7 +770,7 @@ plot(movies_bas, which = 4, ask=F, cex.lab=0.5)
 * * *
 ## Prediction
 
-Now, we can test the predictive capability of the developed model using two movies:  "Zootropolis" released in 2016. The corresponding information was obtained from the [IMDB website](https://www.imdb.com/title/tt2948356/?ref_=nv_sr_1) and [RottenTomatoes](https://www.rottentomatoes.com/m/zootopia) to be consistent with the analysis data. 
+Now, we can test the predictive capability of the developed model using the movie:  "Zootropolis" released in 2016. The corresponding information was obtained from the [IMDB website](https://www.imdb.com/title/tt2948356/?ref_=nv_sr_1) and [RottenTomatoes](https://www.rottentomatoes.com/m/zootopia) to be consistent with the analysis data. 
 
 ```{r zootropolis_bayesian}
 zootropolis <- data.frame(feature_film = "yes", drama="no", 
