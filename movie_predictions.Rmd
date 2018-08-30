@@ -377,16 +377,16 @@ movies_interesting <- movies_interesting%>%
 ```
 
 
-
-
-
-
-
 * * *
 
 ## Modeling
 
-We will choose the **backwards elimination** method in order to reach our __parsimonious model__ (the simpler model with great explanatory predictive power).
+
+Multiple linear regression seek to model the relationship between two or more independent or explanatory variables and the response variable by fitting a linear equation to the data. 
+There is a very important concept to have in mind for linear regression: Collinearity. Two variables are considered to be collinear when they are highly correlated with each other. The inclusion of collinear predictors complicates the model estimation.
+
+
+Our goal is to reach a parsimonious model, this is the simpler model with great explanatory predictive power. In order to do this, we have two options for model selection: Forward selection and backwards elimination. In the first case, we start with an empty model and we add one predictor at a time. We will choose the second option: **Backwards elimination** implies starting with a model comprising all candidates and dropping one predictor at a time until the __parsimonious model__ is reached.
 
 ### Baseline model
 
