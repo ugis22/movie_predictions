@@ -744,7 +744,7 @@ confint(coef_movies)
 plot(movies_bas, which = 1, ask=F)
 ```
 
-We can observe here a plot of the "Residuals vs. Fitted values"" under BMA. Ideally, we will expect to not see outliers or non-constant variance. However, in this case we can see that there is a constant spead over the prediction but there are two outliers. 
+We can observe here a plot of the "Residuals vs. Fitted values"" under BMA. Ideally, we will expect to not see outliers or non-constant variance. However, in this case we can see that there is a constant spread over the prediction but there are two outliers. 
 
  **Model probabilities**
 ```{r prob, fig.height=4}
