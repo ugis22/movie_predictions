@@ -789,7 +789,6 @@ predict_1$Ybma
 
 The true `imdb_rating` is 8, which is pretty close to what our model predicted.
 
-
 * * *
 From the linear regression and the Bayesian model we learnt that in fact the popularity of a movie can be predicted by considering characteristic data of each movie.
 
