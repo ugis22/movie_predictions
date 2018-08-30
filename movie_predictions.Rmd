@@ -164,7 +164,6 @@ grid.table(movies %>%
 
 
 
-
 The variable __imbd_rating__ shows a distribution close to normal with a slightly left skew with a mean of 6.493 and a median of 6.00. 
 
 #### -- Distribution of `audience_score`:
@@ -361,7 +360,6 @@ ddply(movies_interesting,~best_pic_win,summarise,mean=mean(imdb_rating),sd=sd(im
 
 From the plots and the summary descriptive, we learn that MPAA rating and genre don't appear to have a clear association with the rating given in IMDB. However, those movies that won an oscar or the director ever won an oscar appear to have a sightly higher rating. Moreover, the number of votes given show a weak positive association with the IMDB rating.
 
-
 We can see also that the distribution of `imdb_num_votes` looks rigth skew. In order to adjust this, we can apply a log-transformation to the values:
 
 ```{r log}
@@ -377,6 +375,12 @@ movies_interesting <- movies_interesting%>%
                         select(-c(best_actor_win, best_actress_win))
 
 ```
+
+
+
+
+
+
 
 * * *
 
