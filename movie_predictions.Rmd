@@ -504,11 +504,10 @@ predict_1 <- predict(step2_model, zoo, interval="predict")
 
 imdb_rating_predictions <- c(8.0, 7.8)
 
-predictions <- data.frame("t" = "Zootropolis",
-                          "a" = sprintf("%2.1f", predict_1[1]),
-                          "b" = sprintf("%2.1f-%2.1f", predict_1[2], predict_1[3]),
-                          "c" = imdb_rating_predictions[1])
-colnames(predictions) = c("Movie", "Predicted rating", "95% CI", "IMDb rating")
+predictions <- data.frame("Movie" = "Zootropolis",
+                          "Predicted rating" = sprintf("%2.1f", predict_1[1]),
+                          "95% CI" = sprintf("%2.1f-%2.1f", predict_1[2], predict_1[3]),
+                          "IMDb rating" = imdb_rating_predictions[1])
 
 predictions
 ```
@@ -795,7 +794,9 @@ zootropolis <- data.frame(feature_film = "yes", drama="no",
 
 predict_1 <- predict(movies_bas, zootropolis, estimator="BMA", interval = "predict", se.fit=TRUE)
 
-data.frame('Estimated IMDB rating' = predict_1$Ybma, 'Real IMDB rating' = 8.0)
+data.frame('Movie' = 'Zootropolis',
+           'Estimated IMDB rating' = predict_1$Ybma, 
+           'Real IMDB rating' = 8.0)
 ```
 
 The true `imdb_rating` is 8, which is pretty close to what our model predicted.
