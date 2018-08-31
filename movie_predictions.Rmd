@@ -795,7 +795,7 @@ zootropolis <- data.frame(feature_film = "yes", drama="no",
 
 predict_1 <- predict(movies_bas, zootropolis, estimator="BMA", interval = "predict", se.fit=TRUE)
 
-predict_1$Ybma
+data.frame('Estimated IMDB rating' = predict_1$Ybma, 'Real IMDB rating' = 8.0)
 ```
 
 The true `imdb_rating` is 8, which is pretty close to what our model predicted.
