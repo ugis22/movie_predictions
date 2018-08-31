@@ -419,6 +419,17 @@ summary(step2_model)
 ```
 We now see that the $R_{adj}^2$ is 0.3595, not different from our previous model in step1, but with the difference that this time all variables involved are significant. I will not show it here for practical sake, but removal of any of other variables will decrease $R_{adj}^2$. So we considered this our final model. 
 
+### Collinearity
+
+So at this point, we can look into our variables and see if the variables we are interested in show some degree of collinearity. In our dataset, we have mixed variables, this is we have some variables that are categorical and some that are continuous, so in this case, a way to measure collinearity is using the variance inflation factor (VIF). The VIF, that quantifies the extent of multicollinearity in an ordinary linear regression, is calculated as the ratio between the variance of the model with multiple terms and the variance of the model with one term alone. In simple words, it tells us how much the variance of a regression coefficient increases due to collinearity existent in the model. So, let's go ahead and calculate this:
+
+```{r collinearity}
+library(car)
+car::vif(step2_model)
+```
+
+None of our predictors has a high VIF, so we can assume that multicollinearity is not playing a role in our model. 
+
 ### Model Diagnostics
 
 The multiple regression model depends on the following four assumptions:
