@@ -1,6 +1,6 @@
 ## Prediction of movie popularity 
 Read my publication about this project on Medium:  
-[linear and bayesian modelling](https://medium.com/@meinzaugarat/linear-and-bayesian-modelling-in-r-predicting-movie-popularity-6c8ef0a44184)
+[Linear and bayesian modelling in R: Predicting movie popularity](https://medium.com/@meinzaugarat/linear-and-bayesian-modelling-in-r-predicting-movie-popularity-6c8ef0a44184)
 
 ## Introduction
 Movie popularity can help people decide which movie to watch, or whether they want to go the cinema to watch it or wait till the DVD is release and watch it at home. Consequently, it could also help theater owner to choose which movies to show or how many times to show it or for how long.
