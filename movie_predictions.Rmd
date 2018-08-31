@@ -693,7 +693,7 @@ movies_bas <- bas.lm(imdb_rating ~ .,
 
 We will now print the marginal inclusion probabilities obtained for the model:
 
-```{r summary2}
+```{r summary3}
 movies_bas
 ```
 
